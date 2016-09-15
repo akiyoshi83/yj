@@ -13,6 +13,11 @@ func main() {
 	var fp *os.File
 	var err error
 
+	var minify *bool
+
+	minify = flag.Bool("minify", false, "Minify JSON")
+	minify = flag.Bool("m", false, "Minify JSON")
+
 	flag.Parse()
 
 	if flag.NArg() < 1 {
@@ -30,7 +35,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	out := yj.Yj(in)
+	var out []byte
+	if *minify {
+		out = yj.YjMinified(in)
+	} else {
+		out = yj.Yj(in)
+	}
 
 	fmt.Println(string(out))
 }
